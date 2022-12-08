@@ -1,57 +1,72 @@
-import corpus
+from corpus import Corpus
 import utils
 import os
 
-class TrainingCorpus(corpus.Corpus):
 
-    def __init__(self, path_to_emails):
-        super().__init__(path_to_emails)
-        
-        full_path = os.path.join(path_to_emails, "!truth.txt")
+class TrainingCorpus(Corpus):
+    '''
+    Corpus to train filter
+    '''
 
-        self.truth_dict = utils.read_classification_from_file(full_path)
+    def __init__(self, path):
+        super().__init__(path)
 
-        spam_count = 0                                              # ADDED         Maybe it would be better to set
-        for key, value in self.truth_dict.items():                  # ADDED         start_prob to ~0.3
-            if value == "SPAM":                                     # ADDED         Because there are too much spam
-                spam_count += 1                                     # ADDED         in out train/test sets
-        self.START_SPAM_PROB = spam_count / len(self.truth_dict)    # ADDED
-
-    
-    def get_class(self, email_name):
-        return self.truth_dict[email_name]
+        data_path = os.path.join(self.path, "!truth.txt")
+        self.data = utils.read_classification_from_file(data_path)
 
 
-    def is_ham(self, email_name):
-        return True if self.truth_dict[email_name] == "OK" else False
+    def get_class(self, filename):
+        '''
+        Function to get file clasification from thruth file
+
+        :param filename:    name of file with email (string)
+        :return:            clasification of email (string)
+        '''
+        if self.data[filename] == self.SPAM_TAG:
+            return self.SPAM_TAG
+        else: 
+            return self.HAM_TAG
 
 
-    def is_spam(self, email_name):
-        return True if self.truth_dict[email_name] == "SPAM" else False
+    def is_spam(self, filename):
+        '''
+        Function to recognise spam email
+
+        :param filename:    name of file with email (string)
+        :return:            True if it's spam message, False if not (bool)
+        '''
+        return True if self.get_class(filename) == self.SPAM_TAG else False
+
+
+    def is_ham(self, filename):
+        '''
+        Function to recognise ham email
+
+        :param filename:    name of file with email (string)
+        :return:            True if it's ham message, False if not (bool)
+        '''
+        return True if self.get_class(filename) == self.HAM_TAG else False
 
 
     def spams(self):
-        emails = os.listdir(self.path_to_emails)
+        '''
+        Function (generator) to read spam emails
 
-        for email in emails:
-            if not email.startswith("!") and self.is_spam(email):
-                full_path = os.path.join(self.path_to_emails, email)
-
-                with open(full_path, "r", encoding='utf-8') as file:
-                    body = file.read()
-
-                yield (email, body)
+        :return:    email filename and its content (tuple)
+        '''
+        for filename in self.files:
+            if self.is_spam(filename):
+                content = self.open_file(filename)  # Read email content
+                yield (filename, content)     
 
 
     def hams(self):
-        emails = os.listdir(self.path_to_emails)
+        '''
+        Function (generator) to read ham emails
 
-        for email in emails:
-            if not email.startswith("!") and self.is_ham(email):
-                full_path = os.path.join(self.path_to_emails, email)
-
-                with open(full_path, "r", encoding='utf-8') as file:
-                    body = file.read()
-
-                yield (email, body)
-            
+        :return:    email filename and its content (tuple)
+        '''
+        for filename in self.files:
+            if self.is_ham(filename):
+                content = self.open_file(filename)  # Read email content
+                yield (filename, content)   
