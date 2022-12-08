@@ -34,18 +34,19 @@ class BaseFilter:
 
         corpus = Corpus(path)   # Filter's corpus
         for file in corpus.emails():   # Make predictions
-            self.predict(file[0], file[1])
+            self.predict(path, file[0], file[1])
 
         # Write predictions to file
         prediction_path = os.path.join(path, OUTP)
         utils.write_classification_to_file(prediction_path, self.predictions)
 
     
-    def predict(self, filename, content):
+    def predict(self, path, filename, content):
         '''
         Function to make prediction
-        Side effects: Fill self.predictions
+        Side effects: Fill self.predictions with {filename:prediction}
 
+        :param path:        path to directory with tested emails (string)
         :param filename:    name of email (string)
         :param content:     email content (string)
         '''
