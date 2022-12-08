@@ -1,18 +1,48 @@
 import os
 
-class Corpus():
-    def __init__(self, path_to_emails):
-        self.path_to_emails = path_to_emails
+
+class Corpus:
+    '''
+    Corpus to read email contents
+    '''
+
+    def __init__(self, path):
+        '''
+        Initialization of corpus
+
+        :param path:    path to folder with emails (string)
+        '''
+        META_CHARS = "!."   # Characters of metafile begining
+
+        self.SPAM_TAG = "SPAM"
+        self.HAM_TAG = "OK"
+        self.path = path
+        self.files = [i for i in os.listdir(path) if i[0] not in META_CHARS]
 
 
     def emails(self):
-        emails = os.listdir(self.path_to_emails)
+        '''
+        Function (generator) to read emails
 
-        for email in emails:
-            if not email.startswith("!"):   # if not a file with metainformation
-                full_path = os.path.join(self.path_to_emails, email)
+        :return:    email filename and its content (tuple)
+        '''
+        for filename in self.files:
+            content = self.open_file(filename)  # Read email content
+            yield (filename, content)
+        
 
-                with open(full_path, "r", encoding='utf-8') as file:
-                    body = file.read()
+    def open_file(self, filename):
+        '''
+        Function to read file's content
 
-                yield (email, body)
+        :param filename:    name of file to read (string)
+        :return:            file content (string)
+        :raise:             FileNotFoundError - Invalid directory of file
+        '''
+        try:    # Valid directory control 
+            file_path = os.path.join(self.path, filename)
+            with open(file_path, encoding="utf-8") as file:
+                return file.read()   # Read file content
+        except:
+            print("ERROR: Invalid directory! (check if this directory exists)")
+            raise FileNotFoundError
