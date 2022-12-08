@@ -1,24 +1,52 @@
-import corpus
+from corpus import Corpus
 import utils
 import os
 
-class BaseFilter():
 
-    def test(self, path):
-        corp = corpus.Corpus(path)
-        result = dict()
+class BaseFilter:
+    '''
+    Base Filter functionality
+    '''
 
-        for name, body in corp.emails():
-            result[name] = self.test_one_mail(body)
-
-        pred_path = os.path.join(path, "!prediction.txt")
-        utils.write_classification_to_file(pred_path, result)
-
-    
-    def test_one_mail(self, text):
-        ''' Returns "SPAM" or "OK" '''
-        pass
+    def __init__(self):
+        '''
+        Initialization of filter
+        '''
+        self.predictions = {} # Dictionary of predictions filter made
 
 
     def train(self, path):
+        '''
+        Function to filter learning
+
+        :param path:    path to folder with emails (string)
+        '''
+        pass
+
+
+    def test(self, path):
+        '''
+        Function to write result of predictions
+
+        :param path:    path to folder with emails (string)
+        '''
+        OUTP = "!prediction.txt"  # Filename to write result of prediction
+
+        corpus = Corpus(path)   # Filter's corpus
+        for file in corpus.emails():   # Make predictions
+            self.predict(file[0], file[1])
+
+        # Write predictions to file
+        prediction_path = os.path.join(path, OUTP)
+        utils.write_classification_to_file(prediction_path, self.predictions)
+
+    
+    def predict(self, filename, content):
+        '''
+        Function to make prediction
+        Side effects: Fill self.predictions
+
+        :param filename:    name of email (string)
+        :param content:     email content (string)
+        '''
         pass
