@@ -1,37 +1,7 @@
-from email.parser import BytesParser
-from email.policy import default
-import re
-import string
-
-path = "materials/data/1/"
-file_name = "00002.9438920e9a55591b18e60d1ed37d992b"
-file_path = path + file_name
-
-with open(file_path, 'rb') as fp:
-    msg = BytesParser(policy=default).parse(fp)
-
-# msg.keys() - System fields
-# msg.values() - Values of system fields
-# msg.get_payload() - Email Body
-
-msg_body = msg.get_payload().lower()
-
-# Clean from html tags
-pattern = r"<(?:\"[^\"]*\"['\"]*|'[^']*'['\"]*|[^'\">])+>"
-count_html_tag = len(re.findall(pattern, msg_body))
-plain_text = re.compile(pattern).sub('', msg_body)
-
-# Clean from gaps in words 
-pattern = r"""=
-"""
-plain_text = re.compile(pattern).sub('', plain_text)
-
-# Clean from numbers 
-pattern = r"\d+"
-plain_text = re.compile(pattern).sub('', plain_text)
-
-# Clean from punctiation
-plain_text = plain_text.translate(str.maketrans("", "", string.punctuation))
-
-print(plain_text)
-
+0047.4bd712df1ecd85521703fc4d8e11b3bc
+00067.78f9a9d537907424c503f4d29a2c24b4
+0036.87385983942b734179f43c0d6a98877a
+00097.90200a177414673b08df827239a0b9dc
+00119.4cb9c1c20358b4c2a6df2cdc5670fe62
+0210.aa264fefcd8fe85855dc2f400c4683e7
+00100.78af3dc4c39277a6e1893f287cc2771f
