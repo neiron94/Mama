@@ -54,10 +54,13 @@ class TrainingCorpus(Corpus):
 
         :return:    email filename and its content (tuple)
         '''
+        PLAIN_TEXT = 0  # Index of text in returned tuple after parsing email
+
         for filename in self.files:
             if self.is_spam(filename):
-                content = self.open_file(filename)  # Read email content
-                yield (filename, content)     
+                file_path = os.path.join(self.path, filename)
+                plain_text = utils.parse_email(file_path)[PLAIN_TEXT]
+                yield plain_text
 
 
     def hams(self):
@@ -66,7 +69,10 @@ class TrainingCorpus(Corpus):
 
         :return:    email filename and its content (tuple)
         '''
+        PLAIN_TEXT = 0  # Index of text in returned tuple after parsing email
+
         for filename in self.files:
             if self.is_ham(filename):
-                content = self.open_file(filename)  # Read email content
-                yield (filename, content)   
+                file_path = os.path.join(self.path, filename)
+                plain_text = utils.parse_email(file_path)[PLAIN_TEXT]
+                yield plain_text
