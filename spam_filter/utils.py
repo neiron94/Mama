@@ -53,11 +53,8 @@ def parse_email(file):
         plain_text, html_count = clean_text(text)
     else:   # In this case, text is strange reference to another email
         plain_text, html_count = "", 0
-    
 
-    email_attrs = {}    # Dictionary for email attributes
-    for attr, value in content.items():
-        email_attrs[attr] = value
+    email_attrs = {i:content[i] for i in content.keys() if i != "Date"}
 
     return (plain_text, email_attrs, html_count)
 
@@ -92,4 +89,3 @@ def clean_text(text):
     plain_text = plain_text.translate(str.maketrans("", "", pattern))
 
     return (plain_text, count_html)
-
