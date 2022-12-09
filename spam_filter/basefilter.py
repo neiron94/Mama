@@ -50,3 +50,4 @@ class BaseFilter:
         :param filename:    name of the current email (string)
         '''
         pass
+
