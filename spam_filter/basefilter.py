@@ -17,16 +17,18 @@ class BaseFilter:
 
     def train(self, path):
         '''
-        Function to filter learning
-        :param path:    path to folder with emails (string)
+        Trains filter with given set of emails
+
+        :param path:        path to directory with emails for training (string)
         '''
         pass
 
 
     def test(self, path):
         '''
-        Function to write result of predictions
-        :param path:    path to folder with emails (string)
+        Writes result of predictions in !prediction.txt file
+
+        :param path:        path to directory with testing emails (string)
         '''
         OUTP = "!prediction.txt"  # Filename to write result of prediction
 
@@ -41,9 +43,10 @@ class BaseFilter:
     
     def predict(self, path, filename):
         '''
-        Function to make prediction
+        Makes prediction for one particular email
+
         Side effects: Fill self.predictions with {filename:prediction}
-        :param path:        path to directory with tested emails (string)
-        :param filename:    name of email (string)
+        :param path:        path to directory with testing emails (string)
+        :param filename:    name of the current email (string)
         '''
         pass
