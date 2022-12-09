@@ -19,10 +19,10 @@ class MyFilter(basefilter.BaseFilter):
         spam_words = list()
         ham_words = list()
 
-        for spam_text in train_corpus.spam_texts():   # TODO - function spam_texts(). I want to recieve only clean text (only small letters and spaces)
+        for spam_text in train_corpus.spams():
             spam_words += spam_text.strip().split()
 
-        for ham_text in train_corpus.ham_texts():     #TODO - the same thing
+        for ham_text in train_corpus.hams():
             ham_words += ham_text.strip().split()
 
         common_words = set(spam_words).intersection(set(ham_words))
