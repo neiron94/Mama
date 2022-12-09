@@ -22,7 +22,7 @@ class Corpus:
 
     def emails(self):
         '''
-        Function (generator) to read emails
+        Reads emails (generator)
 
         :yield:    email filename and its content (tuple)
         '''
@@ -33,7 +33,7 @@ class Corpus:
 
     def open_file(self, filename):
         '''
-        Function to read file's content
+        Reads file's content
         
         :param filename:    name of file to read (string)
         :return:            file content (string)
