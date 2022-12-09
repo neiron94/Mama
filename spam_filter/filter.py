@@ -35,7 +35,7 @@ class MyFilter(basefilter.BaseFilter):
             self.ham_word_with_freq[word] = ham_words.count(word) / len(ham_words)
 
 
-    def predict(self, path, filename, content):
+    def predict(self, path, filename):
 
         file_path = os.path.join(path, filename)
         plain_text, email_attrs, html_count = utils.parse_email(file_path)
@@ -45,7 +45,7 @@ class MyFilter(basefilter.BaseFilter):
         spam_score, ham_score = self.test_text(plain_text)
         spam_score, ham_score = self.other_tests()   #TODO - decide what it returns
 
-        self.predictions[filename] = "SPAM" if self.spam_score >= self.ham_score else "OK"
+        self.predictions[filename] = "SPAM" if spam_score >= ham_score else "OK"
 
 
     def test_text(self, text):
@@ -61,3 +61,5 @@ class MyFilter(basefilter.BaseFilter):
 
         spam_score = sum([log(p) for p in spam_probs]) + log(START_SPAM_PROB)
         ham_score = sum([log(p) for p in ham_probs]) + log(START_SPAM_PROB)
+
+        return (spam_score, ham_score)
