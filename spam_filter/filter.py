@@ -97,7 +97,7 @@ class MyFilter(basefilter.BaseFilter):
         Tests text of email
 
         :param text: clean text (only words written with small letters) (string)
-        :return:     tuple (spam_score, ham_score)
+        :return:     counted spam_score and ham_score (tuple)
         '''
         # Start probability of email being a SPAM
         START_SPAM_PROB = 0.3
