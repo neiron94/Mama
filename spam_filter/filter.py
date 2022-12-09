@@ -44,7 +44,7 @@ class MyFilter(basefilter.BaseFilter):
         # Find common words for spam and ham
         common_words = set(spam_words).intersection(set(ham_words))
 
-        # Count frequences of spam and ham words
+        # Count frequencies of spam and ham words
         for word in common_words:
             self.spam_word_with_freq[word] = spam_words.count(word) / len(spam_words)
 
@@ -75,9 +75,17 @@ class MyFilter(basefilter.BaseFilter):
         # Probabilities of email being spam or ham
         spam_score = ham_score = 0
 
-        # Counting spam and ham scores by a bunch of tests
+        # Getting start spam and ham scores by words frequency algorithm
         spam_score, ham_score = self.test_text(plain_text)
-        #spam_score, ham_score = self.other_tests()   #TODO - decide what it returns
+
+        if "Subject" in email_attrs:
+            for word in self.bad_words:
+                if word in email_attrs["Subject"].lower():
+                    spam_score += 100
+                    #TODO - create bad words dictionary (word : cost)
+        
+        # if html_count > 10:
+        #     spam_score += 50
 
         # print(f"SPAM_SCORE = {spam_score}") #DEBUG
         # print(f"HAM_SCORE = {ham_score}") #DEBUG
@@ -104,6 +112,6 @@ class MyFilter(basefilter.BaseFilter):
         ham_probs = [self.ham_word_with_freq[word] for word in valid_words]
 
         spam_score = sum([log(p) for p in spam_probs]) + log(START_SPAM_PROB)
-        ham_score = sum([log(p) for p in ham_probs]) + log(START_SPAM_PROB)
+        ham_score = sum([log(p) for p in ham_probs]) + log(1 - START_SPAM_PROB)
 
         return (spam_score, ham_score)
