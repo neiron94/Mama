@@ -46,8 +46,7 @@ class BaseFilter:
         Makes prediction for one particular email
 
         Side effects: Fill self.predictions with {filename:prediction}
-        :param path:        path to directory with testing emails (string)
+        :param path:        path to the directory with testing emails (string)
         :param filename:    name of the current email (string)
         '''
         pass
-
