@@ -3,7 +3,7 @@
 #   https://youtu.be/VQZxLPEdIpE
 
 import basefilter
-import trainingcorpus
+from trainingcorpus import TrainingCorpus
 import utils
 import os
 from math import log
@@ -16,10 +16,11 @@ class MyFilter(basefilter.BaseFilter):
         '''
         super().__init__()
 
-        # Dictionaries with information for testing emails
+        # Dictionaries with trained information for testing emails
         self.spam_word_with_freq = dict()
         self.ham_word_with_freq = dict()
 
+        #TODO - read self.bad_words from file
         #TODO - pre-training
     
 
@@ -27,9 +28,10 @@ class MyFilter(basefilter.BaseFilter):
         '''
         Trains filter with given set of emails
 
+        Side effects:   fills self.ham/spam_word_with_freq
         :param path:    path to directory with emails for training (string)
         '''
-        train_corpus = trainingcorpus.TrainingCorpus(path)
+        train_corpus = TrainingCorpus(path)
 
         # Count spam and ham words in all emails
         spam_words = list()
@@ -60,9 +62,6 @@ class MyFilter(basefilter.BaseFilter):
         :param path:        path to directory with testing emails (string)
         :param filename:    name of the current email (string)
         '''
-
-        # print(f"PREDICTION FOR FILE {filename}") #DEBUG
-
         # Getting necessary information from email content
         file_path = os.path.join(path, filename)
         plain_text, email_attrs, html_count = utils.parse_email(file_path)
@@ -71,6 +70,7 @@ class MyFilter(basefilter.BaseFilter):
         if plain_text == "":
             self.predictions[filename] = "SPAM"
             return
+            #TODO - check quality without this condition
         
         # Probabilities of email being spam or ham
         spam_score = ham_score = 0
@@ -86,9 +86,7 @@ class MyFilter(basefilter.BaseFilter):
         
         # if html_count > 10:
         #     spam_score += 50
-
-        # print(f"SPAM_SCORE = {spam_score}") #DEBUG
-        # print(f"HAM_SCORE = {ham_score}") #DEBUG
+        #TODO - test with html_count later
 
         # Final decision for current email
         self.predictions[filename] = "SPAM" if spam_score >= ham_score else "OK"
@@ -106,8 +104,11 @@ class MyFilter(basefilter.BaseFilter):
 
         text = text.strip().split()
 
+        # Only common words for spam and ham are counted
+        # self.spam_word_with_freq.keys() == self.ham_word_with_freq.keys()
         valid_words = [word for word in text if word in self.spam_word_with_freq]
 
+        # Some mathematics here. Watch video from "used materials" for more info
         spam_probs = [self.spam_word_with_freq[word] for word in valid_words]
         ham_probs = [self.ham_word_with_freq[word] for word in valid_words]
 
