@@ -49,10 +49,14 @@ def parse_email(file):
         content = BytesParser(policy=default).parse(email)
 
     text = content.get_payload()
-    plain_text, html_count = clean_text(text)
+    if type(text) == str:   # Valid email text control
+        plain_text, html_count = clean_text(text)
+    else:   # In this case, text is strange reference to another email
+        plain_text, html_count = "", 0
+    
 
-    email_attrs = {}
-    for attr, value in content:
+    email_attrs = {}    # Dictionary for email attributes
+    for attr, value in content.items():
         email_attrs[attr] = value
 
     return (plain_text, email_attrs, html_count)
@@ -88,3 +92,4 @@ def clean_text(text):
     plain_text = plain_text.translate(str.maketrans("", "", pattern))
 
     return (plain_text, count_html)
+
