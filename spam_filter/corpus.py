@@ -24,7 +24,7 @@ class Corpus:
         '''
         Function (generator) to read emails
 
-        :return:    email filename and its content (tuple)
+        :yield:    email filename and its content (tuple)
         '''
         for filename in self.files:
             content = self.open_file(filename)  # Read email content
@@ -34,7 +34,7 @@ class Corpus:
     def open_file(self, filename):
         '''
         Function to read file's content
-
+        
         :param filename:    name of file to read (string)
         :return:            file content (string)
         :raise:             FileNotFoundError - Invalid directory of file
