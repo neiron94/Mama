@@ -9,6 +9,11 @@ class TrainingCorpus(Corpus):
     '''
 
     def __init__(self, path):
+        '''
+        Initialization of training corpus
+
+        :param path:    path to folder with emails (string)
+        '''
         super().__init__(path)
 
         data_path = os.path.join(self.path, "!truth.txt")
@@ -17,7 +22,7 @@ class TrainingCorpus(Corpus):
 
     def get_class(self, filename):
         '''
-        Function to get file clasification from thruth file
+        Gets file clasification from thruth file
 
         :param filename:    name of file with email (string)
         :return:            clasification of email (string)
@@ -30,29 +35,29 @@ class TrainingCorpus(Corpus):
 
     def is_spam(self, filename):
         '''
-        Function to recognise spam email
+        Recognises spam email
 
-        :param filename:    name of file with email (string)
-        :return:            True if it's spam message, False if not (bool)
+        :param filename:    name of a file with email (string)
+        :return:            True if it's a spam message, False if not (bool)
         '''
         return True if self.get_class(filename) == self.SPAM_TAG else False
 
 
     def is_ham(self, filename):
         '''
-        Function to recognise ham email
-
-        :param filename:    name of file with email (string)
-        :return:            True if it's ham message, False if not (bool)
+        Recognises ham email
+        
+        :param filename:    name of a file with email (string)
+        :return:            True if it's a ham message, False if not (bool)
         '''
         return True if self.get_class(filename) == self.HAM_TAG else False
 
 
     def spams(self):
         '''
-        Function (generator) to read spam emails
+        Reads texts of spam emails (generator)
 
-        :return:    email filename and its content (tuple)
+        :yield:    clean text of spam email (string)
         '''
         PLAIN_TEXT = 0  # Index of text in returned tuple after parsing email
 
@@ -65,9 +70,9 @@ class TrainingCorpus(Corpus):
 
     def hams(self):
         '''
-        Function (generator) to read ham emails
-
-        :return:    email filename and its content (tuple)
+        Reads texts of ham emails (generator)
+        
+        :yield:    clean text of ham email (string)
         '''
         PLAIN_TEXT = 0  # Index of text in returned tuple after parsing email
 
