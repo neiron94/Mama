@@ -8,10 +8,10 @@ SEP = " "   # Separator character
 
 def read_classification_from_file(filename):
     '''
-    Function to read file and clasificate its content
+    Reads file and classificates its content
 
     :param filename:   name of input file (string)
-    :return:           clasification result (dict)
+    :return:           classification result (dict)
     '''
     result = {}
     with open(filename, encoding="utf-8") as file:
@@ -25,22 +25,22 @@ def read_classification_from_file(filename):
 
 def write_classification_to_file(filename, data):
     '''
-    Function to write clasification to output file
+    Writes classification to output file
 
     :param filename:    name of output file (string)
-    :param data:        clasification to write (dict)
+    :param data:        classification to write (dict)
     '''
     with open(filename, "a", encoding="utf-8") as file:
-        for name, clasification in data.items():
-            line = name + SEP + clasification + EOL     # Make output line
+        for name, classification in data.items():
+            line = name + SEP + classification + EOL    # Make output line
             file.write(line)                            # Write output line
 
 
 def parse_email(file):
     '''
-    Function to parse file with email message
+    Parses file with email message
     Returns tuple with plain (cleared) text of message, 
-    email system attributes and count of used html tags in message 
+    email system attributes and count of used html tags in message
 
     :param file:    file with full path (string)
     :return:        information about parsed email (tuple)
@@ -62,10 +62,10 @@ def parse_email(file):
     
 def clean_text(text):
     '''
-    Function to clean raw text from email message
+    Cleans raw text from email message
 
     :param text:    raw text to clean (string)
-    :return:        plain cleaned text and count of deleted html tags (tuple)
+    :return:        plain (cleaned) text and count of deleted html tags (tuple)
     '''
     # Make all letters lowercased
     text = text.lower()
